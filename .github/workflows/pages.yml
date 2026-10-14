@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["results/**/site/**"]
+    paths: ["leaderboard/**"]
 
 permissions:
   contents: read
@@ -19,11 +19,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Collect latest site
+      - name: Collect site
         run: |
           mkdir -p _site
-          LATEST=$(ls -d results/*/site 2>/dev/null | sort | tail -1)
-          if [ -n "$LATEST" ]; then cp -r "$LATEST"/. _site/; else echo "<h1>No results yet</h1>" > _site/index.html; fi
+          cp -r leaderboard/. _site/
+          rm -f _site/README.md
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

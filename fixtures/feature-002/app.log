@@ -1,0 +1,4 @@
+{"level": "INFO", "msg": "boot"}
+{"level": "ERROR", "msg": "disk full"}
+{"level": "INFO", "msg": "retry"}
+{"level": "ERROR", "msg": "timeout"}

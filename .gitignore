@@ -3,7 +3,5 @@ __pycache__/
 .results/
 results/
 runs/
-*.log
 .venv/
 venv/
-__pycache__/

@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "ollama/qwen2.5-coder:7b",
+  "model": "ollama/qwen3:8b",
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
@@ -9,9 +9,9 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "qwen2.5-coder:7b": { "name": "Qwen2.5-Coder 7B (local)" },
-        "qwen3-coder:30b": { "name": "Qwen3-Coder 30B (local)" },
-        "deepseek-coder-v2:16b": { "name": "DeepSeek-Coder-V2 16B (local)" }
+        "qwen3:8b": { "name": "Qwen3 8B (local, canary-verified)" },
+        "qwen3-coder:30b": { "name": "Qwen3-Coder 30B (local, needs ~20GB VRAM)" },
+        "qwen2.5-coder:7b": { "name": "Qwen2.5-Coder 7B (local, FAILS tool-call canary as of 2026-10)" }
       }
     }
   }

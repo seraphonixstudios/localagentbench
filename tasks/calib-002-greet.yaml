@@ -1,0 +1,22 @@
+id: calib-002-greet
+title: Implement greet() (calibration)
+difficulty: easy
+category: feature
+language: python
+tags: [calibration]
+timeout_s: 300
+max_turns: 10
+prompt: |
+  In this repository, the file greet.py defines greet(name), which currently
+  raises NotImplementedError.
+
+  Implement it to return exactly f"Hello, {name}!" (for example,
+  greet("Ada") returns "Hello, Ada!"). Save the file, then run
+  `python -m pytest -q` to verify. Do not change anything else.
+repo:
+  type: fixture
+  path: fixtures/calib-002
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60

@@ -1,0 +1,29 @@
+id: algorithm-001-binary-search
+title: Implement leftmost binary search
+difficulty: medium
+category: algorithm
+language: python
+tags: [search, complexity]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, search.py has a stub bisect_index(xs, x) raising
+  NotImplementedError.
+
+  Implement it to return the LEFTMOST index of x in the sorted list xs,
+  or -1 when x is absent. Must run in O(log n) time — the oracle counts
+  element accesses on a 2M-element input (a linear scan fails).
+
+  Success = `python -m pytest -q` passes.
+repo:
+  type: fixture
+  path: fixtures/algorithm-001
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60
+heldout:
+  path: heldout/algorithm-001
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

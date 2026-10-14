@@ -1,0 +1,26 @@
+id: feature-002-json-log-filter
+title: Implement JSON-lines log filter + CLI
+difficulty: medium
+category: feature
+language: python
+tags: [cli, json]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, logfilter.py has a stub filter_events(events, level)
+  raising NotImplementedError, plus an argparse CLI that reads a JSON-lines
+  file and prints matching events as JSON (one per line).
+
+  Implement filter_events() to return the events whose 'level' equals `level`
+  (case-sensitive, preserve order). Keep the CLI output format unchanged.
+
+  Success = `python -m pytest -q` passes and
+  `python logfilter.py app.log ERROR` prints the two ERROR events.
+repo:
+  type: fixture
+  path: fixtures/feature-002
+oracle:
+  command:
+    - python -m pytest -q
+    - python logfilter.py app.log ERROR
+  timeout_s: 60

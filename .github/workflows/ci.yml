@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  harness:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Validate tasks
+        run: python -m localagentbench check
+      - name: Unit + e2e tests
+        run: python -m pytest tests/ -q
+      - name: Reference solutions (solvability incl. held-out)
+        run: python scripts/verify_reference_solutions.py
+      - name: Mock harness smoke (no model needed)
+        run: >
+          python -m localagentbench run --agent mock
+          --model ollama/ci-mock:0b --tasks ./tasks
+          --out ./results/ci-smoke --report

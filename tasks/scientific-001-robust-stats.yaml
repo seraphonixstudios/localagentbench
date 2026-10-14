@@ -1,0 +1,28 @@
+id: scientific-001-robust-stats
+title: Implement trimmed mean and winsorized std (stdlib only)
+difficulty: medium
+category: scientific
+language: python
+tags: [statistics, numerical]
+timeout_s: 300
+max_turns: 20
+prompt: |
+  In this repository, robust.py has two stubs raising NotImplementedError.
+
+  Implement (stdlib only, no numpy/scipy):
+  1. trimmed_mean(values, proportion): sort, cut floor(proportion/2 * n) items
+     from EACH end, return the mean of the remainder. proportion=0 is the plain
+     mean. Raise ValueError on empty input.
+  2. winsorized_std(values, proportion): sort, cut k=floor(proportion/2*n) from
+     each end; replace the cut tail values with the nearest KEPT value, then
+     return the POPULATION std (pstdev) of the winsorized list. Raise ValueError
+     on empty input.
+
+  Success = `python -m pytest -q` passes.
+repo:
+  type: fixture
+  path: fixtures/scientific-001
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60

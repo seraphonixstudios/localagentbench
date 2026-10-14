@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "localagentbench"
+version = "0.1.0"
+description = "Open-source, reproducible evaluation harness for coding agents (local-first, Ollama + OpenCode)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["pyyaml>=6.0"]
+authors = [{name = "LocalAgentBench contributors"}]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+localagentbench = "localagentbench.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["localagentbench*"]

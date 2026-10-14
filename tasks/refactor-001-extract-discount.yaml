@@ -1,0 +1,24 @@
+id: refactor-001-extract-discount
+title: Extract duplicated discount logic into a helper
+difficulty: medium
+category: refactor
+language: python
+tags: [refactoring, deduplication]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, orders.py computes a "10% discount when subtotal > 100"
+  twice — once in total_standard() and once in total_member() (duplicated logic).
+
+  Refactor: extract a helper function named `discounted(subtotal)` that applies
+  the 10%-over-100 rule, and call it from both total_standard() and
+  total_member(). Behaviour must be unchanged (`python -m pytest -q` passes).
+  Do not change any public signatures except adding the new helper.
+repo:
+  type: fixture
+  path: fixtures/refactor-001
+oracle:
+  command:
+    - python -m pytest -q
+    - python -c "import orders; assert callable(getattr(orders, 'discounted', None)); assert orders.discounted(200) == 180.0; assert orders.discounted(50) == 50"
+  timeout_s: 60

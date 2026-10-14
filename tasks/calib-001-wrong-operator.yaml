@@ -1,0 +1,21 @@
+id: calib-001-wrong-operator
+title: Fix wrong operator in add() (calibration)
+difficulty: easy
+category: bugfix
+language: python
+tags: [calibration, debugging]
+timeout_s: 300
+max_turns: 10
+prompt: |
+  In this repository, the file maths.py defines add(a, b), but it wrongly
+  returns `a - b` instead of `a + b`.
+
+  Open maths.py, change the `-` to `+`, save the file, then run
+  `python -m pytest -q` to verify. Do not change anything else.
+repo:
+  type: fixture
+  path: fixtures/calib-001
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60

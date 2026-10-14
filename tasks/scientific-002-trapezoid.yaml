@@ -1,0 +1,22 @@
+id: scientific-002-trapezoid
+title: Implement trapezoidal numerical integration (stdlib only)
+difficulty: medium
+category: scientific
+language: python
+tags: [numerical, integration]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, integrate.py has a stub trapezoid(f, a, b, n) raising
+  NotImplementedError.
+
+  Implement the composite trapezoidal rule with n subintervals (n >= 1):
+  h=(b-a)/n, result = h * (0.5*f(a) + sum(f(a+i*h) for i in 1..n-1) + 0.5*f(b)).
+  Stdlib only. Success = `python -m pytest -q` passes.
+repo:
+  type: fixture
+  path: fixtures/scientific-002
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60

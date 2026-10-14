@@ -1,0 +1,30 @@
+id: test-001-bank-tests
+title: Write tests for BankAccount (deposit/withdraw/overdraft)
+difficulty: medium
+category: test
+language: python
+tags: [testing, pytest]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, bank.py implements BankAccount with deposit(), withdraw(),
+  an overdraft_limit, and ValueError on invalid operations. The tests/
+  directory has only a placeholder.
+
+  Write thorough pytest tests (new files or extend the placeholder) covering:
+  1. deposit increases balance and rejects amount <= 0 with ValueError
+  2. withdraw decreases balance and rejects amount <= 0 with ValueError
+  3. overdraft: withdrawing beyond balance+overdraft_limit raises ValueError,
+     withdrawing within the limit is allowed (balance may go negative)
+  4. negative initial balance raises ValueError
+
+  Success = `python -m pytest -q` passes with at least 6 test functions that
+  exercise bank.py. Do not modify bank.py.
+repo:
+  type: fixture
+  path: fixtures/test-001
+oracle:
+  command:
+    - python -m pytest -q
+    - python -c "import pathlib, re; files=list(pathlib.Path('tests').glob('test_*.py')); n=sum(len(re.findall(r'def test_', p.read_text())) for p in files); assert n >= 6, f'only {n} tests found'; src=' '.join(p.read_text() for p in files); assert 'overdraft' in src.lower(), 'no overdraft test'; assert 'ValueError' in src or 'raises' in src, 'no error-path test'"
+  timeout_s: 60

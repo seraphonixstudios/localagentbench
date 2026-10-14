@@ -1,0 +1,28 @@
+id: refactor-002-retry-helper
+title: Extract duplicated retry loops into with_retry()
+difficulty: hard
+category: refactor
+language: python
+tags: [refactoring, reliability]
+timeout_s: 600
+max_turns: 25
+prompt: |
+  In this repository, fetchers.py has the same 3-attempt ConnectionError retry
+  loop duplicated in fetch_users() and fetch_orders().
+
+  Refactor: extract a helper `with_retry(fn, attempts=3)` that calls fn(),
+  retrying on ConnectionError up to `attempts` times total, re-raising the last
+  error when attempts run out; return fn()'s value on success. Rewrite both
+  fetch_users() and fetch_orders() to use it. Behaviour must be unchanged
+  (`python -m pytest -q` passes, including the CALLS counts).
+
+  Success = tests pass AND with_retry exists with the (fn, attempts=3)
+  signature AND both fetchers call it.
+repo:
+  type: fixture
+  path: fixtures/refactor-002
+oracle:
+  command:
+    - python -m pytest -q
+    - python -c "import fetchers, inspect; sig=inspect.signature(fetchers.with_retry); assert list(sig.parameters)==['fn','attempts']; assert sig.parameters['attempts'].default==3; src=inspect.getsource(fetchers.fetch_users)+inspect.getsource(fetchers.fetch_orders); assert src.count('with_retry')>=2"
+  timeout_s: 60

@@ -1,0 +1,31 @@
+id: data-001-csv-summary
+title: Summarize CSV sales per category (tolerate bad rows)
+difficulty: medium
+category: data
+language: python
+tags: [csv, etl]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, summary.py has a stub summarize(csv_path) raising
+  NotImplementedError, and sales.csv has a header plus some bad rows
+  (non-numeric and missing amounts).
+
+  Implement summarize() with the stdlib csv module to return
+  {category: total: float}, skipping the header and any row whose amount is
+  missing or not a number. Expected for sales.csv:
+  {"books": 15.0, "games": 25.25} (broken/toys rows skipped).
+
+  Success = `python -m pytest -q` passes.
+repo:
+  type: fixture
+  path: fixtures/data-001
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60
+heldout:
+  path: heldout/data-001
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

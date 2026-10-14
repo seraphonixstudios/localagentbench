@@ -1,0 +1,31 @@
+id: feature-001-wordcount-cli
+title: Implement wordcount stats function and CLI
+difficulty: easy
+category: feature
+language: python
+tags: [cli, argparse]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, wordcount.py has a stub count_stats() that raises
+  NotImplementedError, and an argparse CLI that depends on it.
+
+  Implement count_stats(text) to return {'lines': int, 'words': int, 'chars': int}
+  where lines = len(text.splitlines()), words = len(text.split()), chars = len(text).
+  Do not change the CLI output format: "<lines> <words> <chars> <file>".
+
+  Success = `python -m pytest -q` passes and `python wordcount.py sample.txt`
+  prints counts for the sample file.
+repo:
+  type: fixture
+  path: fixtures/feature-001
+oracle:
+  command:
+    - python -m pytest -q
+    - python wordcount.py sample.txt
+  timeout_s: 60
+heldout:
+  path: heldout/feature-001
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

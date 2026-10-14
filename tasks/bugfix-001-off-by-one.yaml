@@ -1,0 +1,27 @@
+id: bugfix-001-off-by-one
+title: Fix off-by-one in median() for even-length input
+difficulty: easy
+category: bugfix
+language: python
+tags: [debugging, statistics]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, median() in median.py returns the wrong result for
+  even-length inputs (off-by-one: it averages s[mid] and s[mid+1] instead of
+  s[mid-1] and s[mid]).
+
+  Fix the bug so that `python -m pytest -q` passes. Do not change the
+  function signature. Keep the ValueError on empty input.
+repo:
+  type: fixture
+  path: fixtures/bugfix-001
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60
+heldout:
+  path: heldout/bugfix-001
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

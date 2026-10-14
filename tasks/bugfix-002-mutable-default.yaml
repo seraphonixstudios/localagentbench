@@ -1,0 +1,23 @@
+id: bugfix-002-mutable-default
+title: Fix mutable default argument in append_log()
+difficulty: medium
+category: bugfix
+language: python
+tags: [debugging, python-gotcha]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, audit.py's append_log(entry, log=[]) uses a mutable
+  default argument, so state leaks between calls: append_log("a") followed by
+  append_log("b") returns ["a", "b"] instead of ["b"].
+
+  Fix it (standard `log=None` sentinel pattern) so `python -m pytest -q`
+  passes. Keep the signature compatible: an explicitly passed list must still
+  be appended to and returned.
+repo:
+  type: fixture
+  path: fixtures/bugfix-002
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60

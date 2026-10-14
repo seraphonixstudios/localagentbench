@@ -1,0 +1,31 @@
+id: test-002-lru-tests
+title: Write tests for LRUCache (eviction, recency, edges)
+difficulty: hard
+category: test
+language: python
+tags: [testing, pytest, data-structures]
+timeout_s: 600
+max_turns: 25
+prompt: |
+  In this repository, lru.py implements a correct LRUCache(capacity) with
+  get() (None on miss, refreshes recency), put() (insert/update, evicts
+  least-recently-used beyond capacity), __len__, and ValueError for
+  capacity <= 0. The tests/ directory has only a placeholder.
+
+  Write thorough pytest tests covering:
+  1. basic put/get and get-miss returns None
+  2. eviction: over capacity evicts the LEAST recently used (not the newest)
+  3. recency: get() refreshes so a touched key survives eviction
+  4. put() on an existing key updates the value (and refreshes recency)
+  5. capacity <= 0 raises ValueError; __len__ tracks size
+
+  Success = `python -m pytest -q` passes with at least 8 test functions that
+  exercise lru.py. Do not modify lru.py.
+repo:
+  type: fixture
+  path: fixtures/test-002
+oracle:
+  command:
+    - python -m pytest -q
+    - python -c "import pathlib, re; files=list(pathlib.Path('tests').glob('test_*.py')); n=sum(len(re.findall(r'def test_', p.read_text())) for p in files); assert n >= 8, f'only {n} tests found'; src=' '.join(p.read_text() for p in files).lower(); assert 'evict' in src, 'no eviction test'; assert 'lru' in src or 'recen' in src or 'order' in src, 'no recency test'"
+  timeout_s: 60

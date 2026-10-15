@@ -115,6 +115,7 @@ localagentbench/  harness (schema, runner, adapters, metrics, report, cli)
 tests/            unit + end-to-end tests
 scripts/          solvability proofs, metric backfill, model probes
 results/          run bundles (git-ignored) -> site/ for Pages
+leaderboard/      promoted result snapshots published to Pages
 .github/          CI (Ubuntu+Windows) + Pages + issue/PR templates
 ```
 

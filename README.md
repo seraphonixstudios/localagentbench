@@ -13,14 +13,17 @@ Open-source, **reproducible evaluation harness for coding agents**, local-first 
 
 ## Latest results
 
-`qwen3:8b` (local, RTX 5060 Ti 8GB), full 22-task suite, 1 rep (2026-10):
+Same model (`qwen3:8b`, local, RTX 5060 Ti 8GB), full 22-task suite, 1 rep:
 
-**5/22 (22.7%)** — passes: bugfix-003, data-001, feature-002, scientific-002,
-scientific-003 (3 of them also confirmed by hidden held-out tests).
-Partial solutions: data-002 and feature-001 pass hidden tests but fail
-visible ones (the hidden tests were since strengthened to cover those
-dimensions). Prior run on the original 14 tasks × 3 reps: 20/42 pass@1
-(47.6%), 8/14 tasks at pass@3 = 100%.
+| agent | score | confirmed by held-out |
+|---|---|---|
+| Aider | **13/22 (59.1%)** | all 11 applicable passes hidden-confirmed |
+| OpenCode | 5/22 (22.7%) | 3 passes hidden-confirmed |
+
+Aider flips 9 tasks (incl. both LRU/algorithm tasks, calib-001, feature-001,
+test-001); OpenCode flips 1 (data-001). Both fail all 3 refactors, cli-001,
+feature-003, and scientific-001. Prior OpenCode run on the original 14 tasks
+× 3 reps: 20/42 pass@1 (47.6%), 8/14 tasks at pass@3 = 100%.
 
 `qwen2.5-coder:7b` scores 0/12 — it emits tool-call-shaped *text* instead of
 native `tool_calls` and cannot drive the loop (see canary below). Full

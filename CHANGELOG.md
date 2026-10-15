@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Aider × 22-task eval: 13/22 (59.1%) vs OpenCode 5/22 on the same model;
+  9 tasks flip to Aider, 1 to OpenCode, refactors fail for both.
 - Full 22-task `qwen3:8b` eval: 5/22; 3 passes hidden-test-confirmed, 2
   partial solutions caught by visible/hidden split; 2 held-out oracles
   strengthened (data-002 type-key row, feature-001 CLI test); public

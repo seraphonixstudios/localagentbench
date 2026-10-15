@@ -32,6 +32,12 @@ EDIT_RE = re.compile(r"Applied edit to ")
 FAILED_RE = re.compile(r"(?i)failed to apply|error applying|malformed.*?edit")
 
 
+def metadata_file() -> str:
+    """Absolute path of the shipped litellm model-metadata file."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(os.path.dirname(here), "aider-models.json")
+
+
 def aider_binary() -> str | None:
     found = shutil.which("aider")
     if found:
@@ -54,6 +60,7 @@ def build_command(prompt: str, model: str, binary: str = "aider",
                   extra_args: list[str] | None = None) -> list[str]:
     cmd = [binary, "--model", aider_model_id(model),
            "--no-git", "--no-auto-commits", "--yes-always",
+           "--model-metadata-file", metadata_file(),
            "--message", prompt]
     if extra_args:
         cmd.extend(extra_args)
@@ -96,10 +103,14 @@ class AiderAdapter:
         bounded = (f"{prompt}\n\n[bench: complete the task in at most "
                    f"{max_turns} tool steps. Do not ask follow-up questions.]")
         cmd = build_command(bounded, model, binary, self.extra_args)
+        env = dict(os.environ)
+        # Aider warns when this is unset; default to local Ollama but
+        # respect an explicit remote/proxied endpoint.
+        env.setdefault("OLLAMA_API_BASE", "http://127.0.0.1:11434")
         try:
             proc = subprocess.run(
                 cmd, cwd=workdir, capture_output=True, text=True,
-                encoding="utf-8", errors="replace",
+                encoding="utf-8", errors="replace", env=env,
                 timeout=timeout_s)
             wall = time.time() - t0
             sig = parse_aider_output(proc.stdout or "")

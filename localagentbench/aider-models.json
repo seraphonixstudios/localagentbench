@@ -1,0 +1,30 @@
+{
+  "_comment": "litellm local-model metadata for aider (--model-metadata-file). Declares real context windows for local Ollama tags aider has never heard of (e.g. custom -gpu tags), so aider sizes history/repo-map correctly instead of assuming unlimited context. Values mirror this box's Ollama serving (num_ctx 4096). Costs are 0 (local inference).",
+  "ollama/qwen3:8b": {
+    "max_tokens": 4096,
+    "max_input_tokens": 4096,
+    "max_output_tokens": 2048,
+    "input_cost_per_token": 0,
+    "output_cost_per_token": 0,
+    "litellm_provider": "ollama",
+    "mode": "chat"
+  },
+  "ollama/qwen3:8b-gpu": {
+    "max_tokens": 4096,
+    "max_input_tokens": 4096,
+    "max_output_tokens": 2048,
+    "input_cost_per_token": 0,
+    "output_cost_per_token": 0,
+    "litellm_provider": "ollama",
+    "mode": "chat"
+  },
+  "ollama/qwen2.5-coder:7b": {
+    "max_tokens": 4096,
+    "max_input_tokens": 4096,
+    "max_output_tokens": 2048,
+    "input_cost_per_token": 0,
+    "output_cost_per_token": 0,
+    "litellm_provider": "ollama",
+    "mode": "chat"
+  }
+}

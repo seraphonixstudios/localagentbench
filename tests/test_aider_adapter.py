@@ -17,8 +17,10 @@ def test_build_command_shape():
     assert cmd[:2] == ["aider", "--model"]
     assert "ollama/qwen3:8b" in cmd
     for flag in ("--no-git", "--no-auto-commits", "--yes-always",
-                 "--message", "do it"):
+                 "--model-metadata-file", "--message", "do it"):
         assert flag in cmd
+    assert cmd[cmd.index("--model-metadata-file") + 1].endswith(
+        "aider-models.json")
 
 
 def test_model_id_passthrough():
@@ -47,6 +49,17 @@ def test_missing_binary(tmp_path, monkeypatch):
                              timeout_s=10, max_turns=5)
     assert res.exit_code == 127
     assert "aider binary not found" in res.stderr
+
+
+def test_metadata_file_valid():
+    import json
+    from localagentbench.adapters.aider import metadata_file
+    data = json.load(open(metadata_file(), encoding="utf-8"))
+    entries = {k: v for k, v in data.items() if not k.startswith("_")}
+    assert entries, "no model entries"
+    for name, info in entries.items():
+        assert info["max_input_tokens"] > 0, name
+        assert info["litellm_provider"] == "ollama", name
 
 
 def test_run_parses_transcript(tmp_path, monkeypatch):

@@ -1,0 +1,37 @@
+# Intent: like test-001/002 the agent WRITES tests (for a correct helper);
+# the oracle checks the tests exist, cover the key paths, and count calls.
+id: test-003-retry-behavior
+title: Write tests for with_retry (success/transient/permanent)
+difficulty: medium
+category: test
+language: python
+tags: [testing, pytest, reliability]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, retry.py implements with_retry(fn, attempts=3,
+  exceptions=(Exception,)): calls fn(), retries the listed exceptions up to
+  `attempts` total tries, returns fn()'s value on success, re-raises the last
+  error when attempts run out, and raises ValueError for attempts < 1.
+  The tests/ directory has only a placeholder.
+
+  Write thorough pytest tests covering:
+  1. success on the first try returns the value (fn called exactly once)
+  2. transient failure: fn fails K times (K < attempts) then succeeds —
+     assert the value AND the total call count
+  3. permanent failure: fn always raises — assert the last error propagates
+     after exactly `attempts` calls
+  4. the exceptions filter: an unlisted exception (e.g. TypeError when only
+     ValueError is listed) propagates immediately without retry
+  5. attempts=1 means a single call; attempts < 1 raises ValueError
+
+  Success = `python -m pytest -q` passes with at least 7 test functions that
+  exercise retry.py. Do not modify retry.py.
+repo:
+  type: fixture
+  path: fixtures/test-003
+oracle:
+  command:
+    - python -m pytest -q
+    - python -c "import pathlib, re; files=list(pathlib.Path('tests').glob('test_*.py')); n=sum(len(re.findall(r'def test_', p.read_text())) for p in files); assert n >= 7, f'only {n} tests found'; src=' '.join(p.read_text() for p in files); low=src.lower(); assert 'transient' in low or 'flaky' in low, 'no transient test'; assert 'permanent' in low or 'always' in low, 'no permanent-failure test'; assert 'attempts' in low, 'no attempts coverage'; assert 'ValueError' in src or 'raises' in src, 'no error-path test'"
+  timeout_s: 60

@@ -1,0 +1,34 @@
+# Intent: the email/password rules are duplicated in two functions; only a
+# shared-validator refactor satisfies the structural oracle (helpers exist
+# and both call sites use them) while behavior stays identical.
+id: refactor-003-extract-validator
+title: Extract duplicated email/password validation into helpers
+difficulty: medium
+category: refactor
+language: python
+tags: [refactoring, validation]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, auth.py validates emails ("@" present and a dot in the
+  domain part) and passwords (length >= 8 with at least one digit) TWICE —
+  inline in both register() and change_password() (duplicated logic).
+
+  Refactor: extract helpers `is_valid_email(email) -> bool` and
+  `is_valid_password(password) -> bool` implementing exactly the current
+  rules, and call them from both register() and change_password().
+  Behaviour and error messages must be unchanged
+  (`python -m pytest -q` passes). Do not change any public signatures except
+  adding the two helpers.
+repo:
+  type: fixture
+  path: fixtures/refactor-003
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60
+heldout:
+  path: heldout/refactor-003
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

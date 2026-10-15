@@ -1,0 +1,33 @@
+# Intent: distinct from test-002 (where the agent WRITES tests for a correct
+# LRU); here the agent IMPLEMENTS get/put itself, with lock-guarded methods
+# checked structurally plus a seeded model cross-check.
+id: algorithm-002-lru-cache
+title: Implement thread-safe LRU cache get/put
+difficulty: hard
+category: algorithm
+language: python
+tags: [data-structures, concurrency]
+timeout_s: 600
+max_turns: 25
+prompt: |
+  In this repository, lru.py has an incomplete LRUCache(capacity): get() and
+  put() raise NotImplementedError.
+
+  Implement them with correct LRU eviction: get() returns None on miss and
+  refreshes recency on hit; put() inserts/updates, refreshes recency, and
+  evicts the least-recently-used item beyond capacity. Guard get/put/__len__
+  with a threading.Lock (or RLock) stored on the instance — the tests check
+  for it. Keep __init__ and ValueError on capacity <= 0.
+  Success = `python -m pytest -q` passes.
+repo:
+  type: fixture
+  path: fixtures/algorithm-002
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 120
+heldout:
+  path: heldout/algorithm-002
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 120

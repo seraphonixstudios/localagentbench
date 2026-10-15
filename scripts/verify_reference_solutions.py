@@ -212,7 +212,279 @@ def fix_calib_002(tmp: Path):
         'return f"Hello, {name}!"'))
 
 
+def fix_bugfix_003(tmp: Path):
+    (tmp / 'counter.py').write_text(
+        'import threading\n'
+        '\n\n'
+        'class Counter:\n'
+        '    def __init__(self):\n'
+        '        self.count = 0\n'
+        '        self._lock = threading.Lock()\n'
+        '\n'
+        '    def increment(self, n=1):\n'
+        '        with self._lock:\n'
+        '            for _ in range(n):\n'
+        '                self.count += 1\n'
+        '\n'
+        '    def value(self):\n'
+        '        with self._lock:\n'
+        '            return self.count\n')
+
+
+def fix_refactor_003(tmp: Path):
+    (tmp / 'auth.py').write_text(
+        'def is_valid_email(email):\n'
+        '    return "@" in email and "." in email.split("@")[-1]\n'
+        '\n\n'
+        'def is_valid_password(password):\n'
+        '    return len(password) >= 8 and any(c.isdigit() for c in password)\n'
+        '\n\n'
+        'def register(email, password, users):\n'
+        '    if not is_valid_email(email):\n'
+        '        raise ValueError("invalid email")\n'
+        '    if not is_valid_password(password):\n'
+        '        raise ValueError("weak password")\n'
+        '    if email in users:\n'
+        '        raise ValueError("already registered")\n'
+        '    users[email] = password\n'
+        '    return True\n'
+        '\n\n'
+        'def change_password(email, old_password, new_password, users):\n'
+        '    if not is_valid_email(email):\n'
+        '        raise ValueError("invalid email")\n'
+        '    if users.get(email) != old_password:\n'
+        '        raise ValueError("wrong password")\n'
+        '    if not is_valid_password(new_password):\n'
+        '        raise ValueError("weak password")\n'
+        '    users[email] = new_password\n'
+        '    return True\n')
+
+
+def fix_data_002(tmp: Path):
+    (tmp / 'aggregate.py').write_text(
+        'import json\n'
+        'def summarize(path):\n'
+        '    values = []\n'
+        '    by_type = {}\n'
+        '    with open(path, encoding="utf-8") as fh:\n'
+        '        for line in fh:\n'
+        '            if not line.strip():\n'
+        '                continue\n'
+        '            try:\n'
+        '                rec = json.loads(line)\n'
+        '            except ValueError:\n'
+        '                continue\n'
+        '            if not isinstance(rec, dict):\n'
+        '                continue\n'
+        '            t, v = rec.get("type"), rec.get("value")\n'
+        '            if not isinstance(t, str):\n'
+        '                continue\n'
+        '            if not isinstance(v, (int, float)) or isinstance(v, bool):\n'
+        '                continue\n'
+        '            values.append(v)\n'
+        '            by_type[t] = by_type.get(t, 0) + 1\n'
+        '    return {"count": len(values),\n'
+        '            "avg_value": sum(values) / len(values) if values else 0.0,\n'
+        '            "by_type": by_type}\n')
+
+
+def fix_cli_001(tmp: Path):
+    p = tmp / 'fetch.py'
+    src = p.read_text()
+    old_main = src[src.index('def main('):]
+    new_main = ('def main(argv=None):\n'
+                '    import argparse\n'
+                '    import sys\n'
+                '    parser = argparse.ArgumentParser(description="Fetch with retries")\n'
+                '    parser.add_argument("--retry", type=int, default=0)\n'
+                '    args = parser.parse_args(argv)\n'
+                '    last = None\n'
+                '    for _ in range(args.retry + 1):\n'
+                '        try:\n'
+                '            print(attempt())\n'
+                '            return 0\n'
+                '        except RuntimeError as e:\n'
+                '            last = e\n'
+                '    print(f"failed after {args.retry + 1} attempts: {last}", file=sys.stderr)\n'
+                '    return 2\n'
+                '\n\n'
+                'if __name__ == "__main__":\n'
+                '    raise SystemExit(main())\n')
+    p.write_text(src[:src.index('def main(')] + new_main)
+
+
+def fix_scientific_003(tmp: Path):
+    (tmp / 'softmax.py').write_text(
+        'import math\n'
+        'def softmax(xs):\n'
+        '    xs = list(xs)\n'
+        '    if not xs:\n'
+        '        raise ValueError("empty")\n'
+        '    m = max(xs)\n'
+        '    exps = [math.exp(x - m) for x in xs]\n'
+        '    total = sum(exps)\n'
+        '    return [e / total for e in exps]\n')
+
+
+def fix_algorithm_002(tmp: Path):
+    (tmp / 'lru.py').write_text(
+        'import threading\n'
+        'from collections import OrderedDict\n'
+        '\n\n'
+        'class LRUCache:\n'
+        '    def __init__(self, capacity):\n'
+        '        if capacity <= 0:\n'
+        '            raise ValueError("capacity must be > 0")\n'
+        '        self.capacity = capacity\n'
+        '        self._d = OrderedDict()\n'
+        '        self._lock = threading.Lock()\n'
+        '\n'
+        '    def get(self, key):\n'
+        '        with self._lock:\n'
+        '            if key not in self._d:\n'
+        '                return None\n'
+        '            self._d.move_to_end(key)\n'
+        '            return self._d[key]\n'
+        '\n'
+        '    def put(self, key, value):\n'
+        '        with self._lock:\n'
+        '            if key in self._d:\n'
+        '                self._d.move_to_end(key)\n'
+        '            self._d[key] = value\n'
+        '            while len(self._d) > self.capacity:\n'
+        '                self._d.popitem(last=False)\n'
+        '\n'
+        '    def __len__(self):\n'
+        '        with self._lock:\n'
+        '            return len(self._d)\n')
+
+
+def fix_feature_003(tmp: Path):
+    (tmp / 'config.py').write_text(
+        'import copy\n'
+        'import json\n'
+        'from pathlib import Path\n'
+        '\n'
+        'DEFAULTS = {\n'
+        '    "host": "localhost",\n'
+        '    "port": 8080,\n'
+        '    "debug": False,\n'
+        '    "limits": {"cpu": 2, "mem": 512},\n'
+        '}\n'
+        '\n\n'
+        'def _check(value, default, key):\n'
+        '    if isinstance(default, bool):\n'
+        '        if not isinstance(value, bool):\n'
+        '            raise TypeError(key)\n'
+        '    elif isinstance(default, int):\n'
+        '        if not isinstance(value, int) or isinstance(value, bool):\n'
+        '            raise TypeError(key)\n'
+        '    elif isinstance(default, str):\n'
+        '        if not isinstance(value, str):\n'
+        '            raise TypeError(key)\n'
+        '    elif isinstance(default, dict):\n'
+        '        if not isinstance(value, dict):\n'
+        '            raise TypeError(key)\n'
+        '\n\n'
+        'def _merge(base, upd):\n'
+        '    out = copy.deepcopy(base)\n'
+        '    for key, value in upd.items():\n'
+        '        if key not in out:\n'
+        '            raise KeyError(key)\n'
+        '        if isinstance(out[key], dict):\n'
+        '            if not isinstance(value, dict):\n'
+        '                raise TypeError(key)\n'
+        '            out[key] = _merge(out[key], value)\n'
+        '        else:\n'
+        '            _check(value, out[key], key)\n'
+        '            out[key] = value\n'
+        '    return out\n'
+        '\n\n'
+        'def load_config(path, overrides=None):\n'
+        '    cfg = copy.deepcopy(DEFAULTS)\n'
+        '    p = Path(path)\n'
+        '    if p.exists():\n'
+        '        data = json.loads(p.read_text(encoding="utf-8"))\n'
+        '        if not isinstance(data, dict):\n'
+        '            raise TypeError("top-level must be object")\n'
+        '        cfg = _merge(cfg, data)\n'
+        '    if overrides:\n'
+        '        nested = {}\n'
+        '        for key, value in overrides.items():\n'
+        '            node = nested\n'
+        '            parts = key.split(".")\n'
+        '            for part in parts[:-1]:\n'
+        '                node = node.setdefault(part, {})\n'
+        '            node[parts[-1]] = value\n'
+        '        cfg = _merge(cfg, nested)\n'
+        '    return cfg\n')
+
+
+def fix_test_003(tmp: Path):
+    (tmp / 'tests' / 'test_retry.py').write_text(
+        'import pytest\nfrom retry import with_retry\n'
+        'def test_success_first_try():\n'
+        '    calls = []\n'
+        '    def fn():\n'
+        '        calls.append(1)\n'
+        '        return "ok"\n'
+        '    assert with_retry(fn) == "ok"\n'
+        '    assert len(calls) == 1\n'
+        'def test_transient_then_success():\n'
+        '    calls = []\n'
+        '    def fn():\n'
+        '        calls.append(1)\n'
+        '        if len(calls) < 3:\n'
+        '            raise ValueError("flaky")\n'
+        '        return "recovered"\n'
+        '    assert with_retry(fn, attempts=3) == "recovered"\n'
+        '    assert len(calls) == 3\n'
+        'def test_permanent_failure():\n'
+        '    calls = []\n'
+        '    def fn():\n'
+        '        calls.append(1)\n'
+        '        raise ValueError("always fails")\n'
+        '    with pytest.raises(ValueError, match="always fails"):\n'
+        '        with_retry(fn, attempts=4)\n'
+        '    assert len(calls) == 4\n'
+        'def test_unlisted_exception_no_retry():\n'
+        '    calls = []\n'
+        '    def fn():\n'
+        '        calls.append(1)\n'
+        '        raise TypeError("fatal")\n'
+        '    with pytest.raises(TypeError):\n'
+        '        with_retry(fn, attempts=5, exceptions=(ValueError,))\n'
+        '    assert len(calls) == 1\n'
+        'def test_attempts_one():\n'
+        '    calls = []\n'
+        '    def fn():\n'
+        '        calls.append(1)\n'
+        '        return 7\n'
+        '    assert with_retry(fn, attempts=1) == 7\n'
+        '    assert len(calls) == 1\n'
+        'def test_bad_attempts():\n'
+        '    with pytest.raises(ValueError):\n'
+        '        with_retry(lambda: 1, attempts=0)\n'
+        'def test_transient_custom_exception():\n'
+        '    calls = []\n'
+        '    def fn():\n'
+        '        calls.append(1)\n'
+        '        if len(calls) == 1:\n'
+        '            raise KeyError("transient")\n'
+        '        return "k"\n'
+        '    assert with_retry(fn, attempts=2, exceptions=(KeyError,)) == "k"\n'
+        '    assert len(calls) == 2\n')
+
+
 FIXES = {
+    'bugfix-003-race-condition': fix_bugfix_003,
+    'refactor-003-extract-validator': fix_refactor_003,
+    'data-002-jsonl-aggregate': fix_data_002,
+    'cli-001-argparse-retry': fix_cli_001,
+    'scientific-003-stable-softmax': fix_scientific_003,
+    'algorithm-002-lru-cache': fix_algorithm_002,
+    'feature-003-config-loader': fix_feature_003,
+    'test-003-retry-behavior': fix_test_003,
     'calib-001-wrong-operator': fix_calib_001,
     'calib-002-greet': fix_calib_002,
     'bugfix-001-off-by-one': fix_bugfix_001,

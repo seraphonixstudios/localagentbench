@@ -1,0 +1,35 @@
+# Intent: the CLI must gain real retry semantics (attempt budget, clean
+# non-zero exit without traceback); fails_left.txt mocks failures offline.
+id: cli-001-argparse-retry
+title: Add --retry and clean exit codes to fetch CLI
+difficulty: medium
+category: cli
+language: python
+tags: [cli, argparse, reliability]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, fetch.py is a CLI whose attempt() fails while the
+  fails_left.txt counter is positive (consuming one failure per call) and
+  currently crashes with a traceback on any failure; there is no --retry.
+
+  Add `--retry N` (argparse, type int, default 0) meaning up to N retries
+  after the first attempt (N+1 attempts total). On success print the result
+  and exit 0. When attempts run out, print an error to stderr and exit
+  non-zero WITHOUT a traceback. Do not change attempt() or the "OK" output.
+
+  Success = `python -m pytest -q` passes and `python fetch.py --help`
+  documents --retry.
+repo:
+  type: fixture
+  path: fixtures/cli-001
+oracle:
+  command:
+    - python -m pytest -q
+    - python fetch.py --help
+  timeout_s: 60
+heldout:
+  path: heldout/cli-001
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

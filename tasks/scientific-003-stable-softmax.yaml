@@ -1,0 +1,30 @@
+# Intent: math.exp overflows past ~709, so only max-subtraction passes the
+# large-logit tests; shift-invariance is the property under test.
+id: scientific-003-stable-softmax
+title: Implement numerically stable softmax (stdlib only)
+difficulty: medium
+category: scientific
+language: python
+tags: [numerical, stability]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, softmax.py computes softmax naively as
+  exp(x)/sum(exp(x)), which overflows (OverflowError) on large logits like
+  [1000, 1001, 1002].
+
+  Implement the numerically stable version: subtract max(xs) before
+  exponentiating. Raise ValueError on empty input. Stdlib only.
+  Success = `python -m pytest -q` passes.
+repo:
+  type: fixture
+  path: fixtures/scientific-003
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60
+heldout:
+  path: heldout/scientific-003
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

@@ -1,0 +1,39 @@
+# Intent: a realistic small config surface — deep merge, dotted overrides,
+# strict type validation (int-rejects-bool edge), unknown-key rejection.
+id: feature-003-config-loader
+title: Implement config loader with defaults and validation
+difficulty: medium
+category: feature
+language: python
+tags: [config, validation]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, config.py has DEFAULTS and a stub
+  load_config(path, overrides=None) raising NotImplementedError, plus an
+  example.json with a partial config.
+
+  Implement load_config() with the stdlib json module:
+  1. Missing file -> a fresh copy of DEFAULTS.
+  2. JSON object files deep-merge over DEFAULTS (nested dicts merge key by
+     key, e.g. example.json yields limits {"cpu": 2, "mem": 1024}).
+  3. overrides {"dotted.key": value} apply last (a plain nested-dict value
+     also deep-merges).
+  4. Type validation against DEFAULTS: mismatch -> TypeError. int fields
+     reject bool, bool/str/dict matches are strict.
+  5. Unknown keys (file or overrides, at any depth) -> KeyError.
+  6. Never mutate DEFAULTS.
+
+  Success = `python -m pytest -q` passes.
+repo:
+  type: fixture
+  path: fixtures/feature-003
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60
+heldout:
+  path: heldout/feature-003
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

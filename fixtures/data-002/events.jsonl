@@ -1,0 +1,12 @@
+{"type": "click", "value": 10}
+{"type": "click", "value": 20}
+{"type": "view", "value": 5}
+{"type": "click"}
+{"value": 7}
+{"type": "view", "value": "nine"}
+{"type": "view", "value": null}
+
+not json at all
+{"type": "click", "value": 30.5}
+{"type": 5, "value": 1}
+{"type": "view", "value": true}

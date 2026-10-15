@@ -1,0 +1,35 @@
+# Intent: real-world dirty JSONL (missing keys, wrong types incl. bool-is-int
+# gotcha, blank lines, malformed rows); golden output pins exact skipping.
+id: data-002-jsonl-aggregate
+title: Aggregate dirty JSONL (skip bad records)
+difficulty: medium
+category: data
+language: python
+tags: [json, etl]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, aggregate.py has a stub summarize(path) raising
+  NotImplementedError, and events.jsonl mixes good records with missing keys,
+  wrong types, a blank line, and a malformed row.
+
+  Implement summarize(path) with the stdlib json module. Each valid record is
+  {"type": str, "value": int/float but not bool}; skip everything else
+  (blank lines, bad JSON, missing keys, wrong types). Extra keys are fine.
+  Return {"count": <valid records>, "avg_value": <mean, 0.0 when empty>,
+  "by_type": {<type>: <count>}}. For events.jsonl the answer is
+  {"count": 4, "avg_value": 16.375, "by_type": {"click": 3, "view": 1}}.
+
+  Success = `python -m pytest -q` passes.
+repo:
+  type: fixture
+  path: fixtures/data-002
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 60
+heldout:
+  path: heldout/data-002
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

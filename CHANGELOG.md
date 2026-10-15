@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+- 8 new tasks (22 total): bugfix-003 (thread race), refactor-003 (validators),
+  data-002 (dirty JSONL), cli-001 (retry + exit codes), scientific-003
+  (stable softmax), algorithm-002 (thread-safe LRU), feature-003 (config
+  loader), test-003 (retry tests). Held-out oracles for 7 of the 8.
+
 ## [0.1.0] - 2026-10-15
 
 Initial public release.

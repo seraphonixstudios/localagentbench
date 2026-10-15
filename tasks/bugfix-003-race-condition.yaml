@@ -1,0 +1,31 @@
+# Intent: the only correct fix is synchronization; hammer tests make a
+# racy counter fail (loses thousands of updates) while a locked one passes.
+id: bugfix-003-race-condition
+title: Fix race in shared Counter incremented from threads
+difficulty: medium
+category: bugfix
+language: python
+tags: [concurrency, threading]
+timeout_s: 300
+max_turns: 15
+prompt: |
+  In this repository, counter.py defines a shared Counter whose increment()
+  does an unsynchronized read-modify-write. When incremented from multiple
+  threads, updates are lost and value() is wrong
+  (`python -m pytest -q` fails on the hammer test).
+
+  Fix the race (e.g. guard increments with a threading.Lock) so the final
+  count is always exact. Keep the public API: Counter(), increment(n=1),
+  value(). Success = `python -m pytest -q` passes.
+repo:
+  type: fixture
+  path: fixtures/bugfix-003
+oracle:
+  command:
+    - python -m pytest -q
+  timeout_s: 120
+heldout:
+  path: heldout/bugfix-003
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 120

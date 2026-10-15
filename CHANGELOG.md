@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- Full 22-task `qwen3:8b` eval: 5/22; 3 passes hidden-test-confirmed, 2
+  partial solutions caught by visible/hidden split; 2 held-out oracles
+  strengthened (data-002 type-key row, feature-001 CLI test); public
+  leaderboard refreshed.
 - Aider adapter (`--agent aider`, incl. uv-bin resolution and transcript
   parsing); adapter registry + CLI choices extended.
 - 8 new tasks (22 total): bugfix-003 (thread race), refactor-003 (validators),

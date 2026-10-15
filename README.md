@@ -13,16 +13,18 @@ Open-source, **reproducible evaluation harness for coding agents**, local-first 
 
 ## Latest results
 
-`qwen3:8b` (local, RTX 5060 Ti 8GB), 14 tasks × 3 reps = 42 runs:
+`qwen3:8b` (local, RTX 5060 Ti 8GB), full 22-task suite, 1 rep (2026-10):
 
-| task | pass@1 | pass@3 |
-|---|---|---|
-| algorithm-001, calib-002, feature-001, feature-002, scientific-002 | 100% | 100% |
-| bugfix-001, data-001 | 67% | 100% |
-| test-001 | 33% | 100% |
-| bugfix-002, calib-001, refactor-001/002, scientific-001, test-002 | 0% | 0% |
+**5/22 (22.7%)** — passes: bugfix-003, data-001, feature-002, scientific-002,
+scientific-003 (3 of them also confirmed by hidden held-out tests).
+Partial solutions: data-002 and feature-001 pass hidden tests but fail
+visible ones (the hidden tests were since strengthened to cover those
+dimensions). Prior run on the original 14 tasks × 3 reps: 20/42 pass@1
+(47.6%), 8/14 tasks at pass@3 = 100%.
 
-**20/42 (47.6%) pass@1; 8/14 tasks pass@3 = 100%.** `qwen2.5-coder:7b` scores 0/12 — it emits tool-call-shaped *text* instead of native `tool_calls` and cannot drive the loop (see canary below). Full reports: [`results/`](results/).
+`qwen2.5-coder:7b` scores 0/12 — it emits tool-call-shaped *text* instead of
+native `tool_calls` and cannot drive the loop (see canary below). Full
+reports: [`leaderboard/`](leaderboard/) (published site) and [`results/`](results/).
 
 ## Quickstart
 

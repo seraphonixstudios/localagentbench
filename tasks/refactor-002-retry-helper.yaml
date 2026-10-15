@@ -26,3 +26,8 @@ oracle:
     - python -m pytest -q
     - python -c "import fetchers, inspect; sig=inspect.signature(fetchers.with_retry); assert list(sig.parameters)==['fn','attempts']; assert sig.parameters['attempts'].default==3; src=inspect.getsource(fetchers.fetch_users)+inspect.getsource(fetchers.fetch_orders); assert src.count('with_retry')>=2"
   timeout_s: 60
+heldout:
+  path: heldout/refactor-002
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

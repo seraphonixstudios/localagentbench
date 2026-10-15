@@ -24,3 +24,8 @@ oracle:
     - python -m pytest -q
     - python logfilter.py app.log ERROR
   timeout_s: 60
+heldout:
+  path: heldout/feature-002
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

@@ -22,3 +22,8 @@ oracle:
     - python -m pytest -q
     - python -c "import orders; assert callable(getattr(orders, 'discounted', None)); assert orders.discounted(200) == 180.0; assert orders.discounted(50) == 50"
   timeout_s: 60
+heldout:
+  path: heldout/refactor-001
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

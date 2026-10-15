@@ -20,3 +20,8 @@ oracle:
   command:
     - python -m pytest -q
   timeout_s: 60
+heldout:
+  path: heldout/calib-002
+  command:
+    - python -m pytest -q heldout
+  timeout_s: 60

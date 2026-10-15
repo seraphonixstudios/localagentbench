@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- Aider: declare local context windows via litellm metadata (kills the
+  unknown-model warning, bounds history to the real 4k window) and default
+  `OLLAMA_API_BASE`. Verified warnings gone; did not flip the refactor-002
+  600s dithering failure (model-side reasoning loop, zero edits).
 - Aider × 22-task eval: 13/22 (59.1%) vs OpenCode 5/22 on the same model;
   9 tasks flip to Aider, 1 to OpenCode, refactors fail for both.
 - Full 22-task `qwen3:8b` eval: 5/22; 3 passes hidden-test-confirmed, 2

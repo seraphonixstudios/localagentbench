@@ -108,6 +108,7 @@ Validate: `python -m localagentbench check`.
 - **Gate every model with the canary first**: `doctor --probe <model>`. Verified 2026-10: `qwen2.5-coder:7b` FAILS (text-shaped pseudo-calls), `qwen3:8b` PASSES.
 - `doctor` lists local models and recommends coding ones (`qwen3-coder`, `qwen2.5-coder`, `deepseek-coder-v2`, ...). 30B models need ~20GB VRAM; on 8GB cards, probe small models and trust the canary over the name.
 - Non-coding models (dolphin, llava, whisper, embed) trigger a tool-calling warning; keep `max_turns` small for them.
+- Aider + unknown local tags: aider assumes *unlimited* context for models it hasn't heard of (e.g. custom `-gpu` tags) and warns about unset `OLLAMA_API_BASE`. The adapter ships `localagentbench/aider-models.json` (real 4k windows via `--model-metadata-file`) and defaults the env var. Verified: warnings gone. Note it does *not* cure model-side dithering — a 600s reasoning loop with zero edits on refactor-002 persisted, which is the model ruminating, not context overflow.
 - Cloud providers later: pass any OpenCode model id (`anthropic/...`, `openai/...`) — the harness is provider-agnostic. See `opencode.json.example` for Ollama wiring.
 
 ## Project structure

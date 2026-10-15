@@ -10,6 +10,7 @@ def test_second_file(tmp_path):
         '{"type": "b", "value": [1]}\n'
         '{"type": "b", "value": {"x": 1}}\n'
         '{"type": "a", "value": false}\n'
+        '{"type": ["x"], "value": 9}\n'
         '\n'
         '[]\n',
         encoding="utf-8")

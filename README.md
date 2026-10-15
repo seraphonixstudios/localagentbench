@@ -108,9 +108,9 @@ Validate: `python -m localagentbench check`.
 ## Project structure
 
 ```
-tasks/            task YAML (14)
+tasks/            task YAML (22; see CHANGELOG for batches)
 fixtures/         agent-visible repos
-heldout/          hidden tests (injected post-run)
+heldout/          hidden tests for 11 tasks (injected post-run)
 localagentbench/  harness (schema, runner, adapters, metrics, report, cli)
 tests/            unit + end-to-end tests
 scripts/          solvability proofs, metric backfill, model probes

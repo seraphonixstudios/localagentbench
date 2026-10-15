@@ -9,7 +9,7 @@ Open-source, **reproducible evaluation harness for coding agents**, local-first 
 - Tasks are versioned **YAML files** (`tasks/`) with a fixture repo (or git URL) + a **deterministic oracle** (commands that must exit 0).
 - The runner isolates every run in a temp dir, invokes the agent **headless** (`opencode run`), captures trajectory/token/time signals, runs the oracle **plus hidden held-out tests**, and writes **structured JSON + raw logs**.
 - Reports render to **Markdown + static HTML** (publish `results/<run>/site/` to GitHub Pages).
-- Agent adapters are **pluggable** (`localagentbench/adapters/`) — OpenCode first, Claude Code / Aider later.
+- Agent adapters are **pluggable** (`localagentbench/adapters/`) — OpenCode and Aider work today (`--agent opencode|aider`); Claude Code and others later.
 
 ## Latest results
 
@@ -92,7 +92,7 @@ Validate: `python -m localagentbench check`.
 ## How it works
 
 1. **Isolation** (`isolation.py`): per-run temp dir; fixture copied or `git clone --depth 1` + checkout. No cross-run contamination.
-2. **Agent** (`adapters/opencode.py`): runs the resolved `opencode` binary headless with `cwd=workdir`. Captures stdout/stderr, wall time; parses the NDJSON event stream for token/tool signals. Missing binary → clear error (use `--agent mock` for plumbing tests).
+2. **Agent** (`adapters/opencode.py`, `adapters/aider.py`): runs the resolved agent binary headless with `cwd=workdir` (`opencode run ...`, `aider --message ... --yes-always`). Captures stdout/stderr, wall time; parses the trajectory for token/tool signals (NDJSON events for OpenCode, `Applied edit to` + `Tokens:` lines for Aider). Missing binary → clear error (use `--agent mock` for plumbing tests). Aider needs `uv tool install aider-chat --python 3.12` (pip's build is ancient on new Pythons); success always comes from the oracle, never the exit code.
 3. **Oracle** (`oracle.py`): runs each command with timeout, records exit/stdout/stderr. UTF-8 capture with replacement (Windows-safe).
 4. **Held-out oracle** (`isolation.inject_heldout`): after the agent phase, hidden tests from `heldout/<id>/` (never copied to the workdir up front) are injected and run. `success` requires both visible and held-out passes; visible-pass + held-out-fail is reported as an overfit/cheat signal. `check` rejects held-out dirs living inside the fixture tree.
 5. **Metrics** (`metrics.py`): per-run latency, tokens (in/out when the trajectory exposes them), tool calls + failed calls (hallucination proxy); aggregate success rate, unbiased `pass@k` (Chen et al.), avg latency/tokens, held-out rates. `human_preference` field + `preference-template.csv` placeholder for later pairwise ranking.

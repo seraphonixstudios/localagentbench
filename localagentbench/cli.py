@@ -130,7 +130,7 @@ def build_parser() -> argparse.ArgumentParser:
                    help="e.g. ollama/qwen3-coder:30b (default: auto-detect)")
     r.add_argument("--tasks", default="./tasks")
     r.add_argument("--agent", default="opencode",
-                   choices=["opencode", "mock"])
+                   choices=["opencode", "aider", "mock"])
     r.add_argument("--out", default="./results/latest")
     r.add_argument("--task", action="append", default=None,
                    help="run only this task id (repeatable)")

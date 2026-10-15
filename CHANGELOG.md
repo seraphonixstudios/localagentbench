@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Aider adapter (`--agent aider`, incl. uv-bin resolution and transcript
+  parsing); adapter registry + CLI choices extended.
 - 8 new tasks (22 total): bugfix-003 (thread race), refactor-003 (validators),
   data-002 (dirty JSONL), cli-001 (retry + exit codes), scientific-003
   (stable softmax), algorithm-002 (thread-safe LRU), feature-003 (config

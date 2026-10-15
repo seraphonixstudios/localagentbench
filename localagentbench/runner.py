@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from . import __version__
+from .adapters.aider import AiderAdapter
 from .adapters.mock import MockAdapter
 from .adapters.opencode import OpenCodeAdapter
 from .isolation import inject_heldout, prepare_workdir
@@ -21,9 +22,11 @@ from .schema import Task
 def get_adapter(name: str, agent: str = "build"):
     if name == "opencode":
         return OpenCodeAdapter(agent=agent)
+    if name == "aider":
+        return AiderAdapter()
     if name == "mock":
         return MockAdapter()
-    raise ValueError(f"unknown agent adapter '{name}' (choose: opencode, mock)")
+    raise ValueError(f"unknown agent adapter '{name}' (choose: opencode, aider, mock)")
 
 
 def run_single_task(task: Task, model: str, adapter, repo_root: Path,
